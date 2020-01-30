@@ -1,6 +1,9 @@
-#!/usr/bin/python3
+from flask import Flask
+from flask import request, jsonify
 import os
 import aiml
+
+app = Flask(__name__)
 
 BRAIN_FILE="brain.dump"
 
@@ -22,7 +25,17 @@ else:
 
 # Endless loop which passes the input to the bot and prints
 # its response
-while True:
-    input_text = input("> ")
+
+@app.route('/', methods=['GET'])
+def result():
+    if 'id' in request.args:
+        id = request.args['id']
+    else:
+        id = "hi"
+    input_text = id
     response = k.respond(input_text)
-    print(response)
+    return response
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=80)
+    
